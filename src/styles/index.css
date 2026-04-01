@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/src/styles/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Middle Earth';
+  src: url('/src/styles/fonts/Middleearth/Middleearth-ao6m.ttf')
+    format('truetype');
+}
+
+@font-face {
+  font-family: 'Ring Bearer';
+  src: url('/src/styles/fonts/Ringbearer/RingbearerMedium-51mgZ.ttf')
+    format('truetype');
+}
+
+@font-face {
+  font-family: 'Station';
+  src: url('/src/styles/fonts/Station/Station.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wizzta';
+  src: url('/src/styles/fonts/Wizzta/Wizzta.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wizard of the Moon';
+  src: url('/src/styles/fonts/Wizard of the Moon/Wizard off the Moon.ttf')
+    format('truetype');
+}
+
+.gradient {
+  background: linear-gradient(90deg, #c756f7 0%, #9946e7 100%);
+}
+
+/* Note: works in the html, not body element */
+html {
+  scroll-behavior: smooth;
+}
