@@ -1,12 +1,12 @@
 import { createSignal, onMount } from 'solid-js';
 import Swal from 'sweetalert2';
 import Chart from 'chart.js/auto';
-import checkSessionJwt from '../../helpers/check-session-jwt.js';
-import request from '../../helpers/request.js';
-import Navbar from '../../components/app/navbar.jsx';
-import Heading from '../../components/app/heading.jsx';
-import P from '../../components/app/paragraph.jsx';
-import Select from '../../components/app/select.jsx';
+import checkSessionJwt from '../../../helpers/check-session-jwt.js';
+import request from '../../../helpers/request.js';
+import Navbar from '../../../components/app/navbar.jsx';
+import Heading from '../../../components/app/heading.jsx';
+import P from '../../../components/app/paragraph.jsx';
+import Select from '../../../components/app/select.jsx';
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
@@ -85,7 +85,7 @@ async function drawPizzaChart(
   labels,
   values,
   titleText,
-  backgroundColor
+  backgroundColor,
 ) {
   const chartEl = document.getElementById(canvasElId);
   const data = {
@@ -211,7 +211,7 @@ async function configureBarCharts() {
     yearChartEl,
     yearLabels,
     yearData,
-    `Requests per month in ${year}`
+    `Requests per month in ${year}`,
   );
 
   const monthChartEl = document.getElementById('barChartMonth');
@@ -225,7 +225,7 @@ async function configureBarCharts() {
     monthLabels,
     monthData,
     `Requests per day in ${MONTH_ENUM[month]} of ${year}`,
-    1
+    1,
   );
 
   const dayChartEl = document.getElementById('barChartDay');
@@ -238,7 +238,7 @@ async function configureBarCharts() {
     dayChartEl,
     dayLabels,
     dayData,
-    `Requests per hour in ${day}, ${MONTH_ENUM[month]} of ${year}`
+    `Requests per hour in ${day}, ${MONTH_ENUM[month]} of ${year}`,
   );
 }
 

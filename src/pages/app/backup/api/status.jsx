@@ -1,16 +1,16 @@
 import { onMount } from 'solid-js';
-import checkSessionJwt from '../../../helpers/check-session-jwt.js';
-import request from '../../../helpers/request.js';
-import Navbar from '../../../components/app/navbar.jsx';
-import Heading from '../../../components/app/heading.jsx';
-import P from '../../../components/app/paragraph.jsx';
+import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
+import request from '../../../../helpers/request.js';
+import Navbar from '../../../../components/app/navbar.jsx';
+import Heading from '../../../../components/app/heading.jsx';
+import P from '../../../../components/app/paragraph.jsx';
 
 async function readApiHealth(dataSource) {
   const responseJson = await request(
     'GET',
     `/health/${dataSource}`,
     null,
-    true
+    true,
   );
   if (responseJson.success === 'false') {
     return 'unhealthy';

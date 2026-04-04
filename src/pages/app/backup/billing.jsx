@@ -1,5 +1,5 @@
-import Navbar from '../../components/app/navbar.jsx';
-import Anchor from '../../components/app/anchor.jsx';
+import Navbar from '../../../components/app/navbar.jsx';
+import Anchor from '../../../components/app/anchor.jsx';
 
 function Billing() {
   return (

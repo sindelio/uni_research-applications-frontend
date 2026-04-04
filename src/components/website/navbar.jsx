@@ -1,5 +1,8 @@
+import env from '../../client-envs/current.js';
 import { createSignal, onMount } from 'solid-js';
 import { A } from '@solidjs/router';
+
+const { FRONTEND_URL } = env;
 
 const [getMenuVisibility, setMenuVisibility] = createSignal(false);
 
@@ -159,7 +162,7 @@ function Navbar() {
           class="px-10 py-4 md:py-0 hover:underline rounded-full focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
         >
           <a
-            href="https://talentsourcery.io/app/signin"
+            href={`${FRONTEND_URL}/app/signin`}
             target="_blank"
             rel="noreferrer"
           >

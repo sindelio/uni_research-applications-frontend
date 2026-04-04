@@ -1,22 +1,22 @@
-import env from '../../../client-envs/current.js';
+import env from '../../../../client-envs/current.js';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import checkSessionJwt from '../../../helpers/check-session-jwt.js';
-import request from '../../../helpers/request.js';
-import exists from '../../../helpers/exists.js';
-import Navbar from '../../../components/app/navbar.jsx';
-import Heading from '../../../components/app/heading.jsx';
-import P from '../../../components/app/paragraph.jsx';
-import InputText from '../../../components/app/input-text.jsx';
-import Select from '../../../components/app/select.jsx';
-import Button from '../../../components/app/button.jsx';
-import Divider from '../../../components/app/divider.jsx';
+import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
+import request from '../../../../helpers/request.js';
+import exists from '../../../../helpers/exists.js';
+import Navbar from '../../../../components/app/navbar.jsx';
+import Heading from '../../../../components/app/heading.jsx';
+import P from '../../../../components/app/paragraph.jsx';
+import InputText from '../../../../components/app/input-text.jsx';
+import Select from '../../../../components/app/select.jsx';
+import Button from '../../../../components/app/button.jsx';
+import Divider from '../../../../components/app/divider.jsx';
 
 async function readAccount() {
   const responseJson = await request('GET', '/', null, {
     'Content-Type': 'application/json',
     authorization: `Bearer ${localStorage.getItem(
-      'talent-sourcery-session-jwt'
+      'talent-sourcery-session-jwt',
     )}`,
   });
   if (responseJson.error) {
@@ -112,7 +112,7 @@ async function addSubmitListener() {
           currency: newCurrency,
         },
       },
-      true
+      true,
     );
     if (responseJson.error) {
       await Swal.fire({

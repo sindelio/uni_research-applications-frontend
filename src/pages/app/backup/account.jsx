@@ -1,15 +1,15 @@
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import checkSessionJwt from '../../helpers/check-session-jwt.js';
-import exists from '../../helpers/exists.js';
-import request from '../../helpers/request.js';
-import Navbar from '../../components/app/navbar.jsx';
-import Heading from '../../components/app/heading.jsx';
-import P from '../../components/app/paragraph.jsx';
-import InputText from '../../components/app/input-text.jsx';
-import InputPassword from '../../components/app/input-password.jsx';
-import Button from '../../components/app/button.jsx';
-import Divider from '../../components/app/divider.jsx';
+import checkSessionJwt from '../../../helpers/check-session-jwt.js';
+import exists from '../../../helpers/exists.js';
+import request from '../../../helpers/request.js';
+import Navbar from '../../../components/app/navbar.jsx';
+import Heading from '../../../components/app/heading.jsx';
+import P from '../../../components/app/paragraph.jsx';
+import InputText from '../../../components/app/input-text.jsx';
+import InputPassword from '../../../components/app/input-password.jsx';
+import Button from '../../../components/app/button.jsx';
+import Divider from '../../../components/app/divider.jsx';
 
 async function readAccount() {
   const responseJson = await request('GET', '/', null, true);
@@ -59,7 +59,7 @@ async function addDetailsSubmitListener() {
         name: newName,
         company: newCompany,
       },
-      true
+      true,
     );
     if (responseJson.error) {
       await Swal.fire({
@@ -152,7 +152,7 @@ async function addPasswordSubmitListener(storedPassword) {
       {
         password: newPassword,
       },
-      true
+      true,
     );
     if (responseJson.error) {
       await Swal.fire({

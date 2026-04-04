@@ -3,8 +3,6 @@ import Navbar from '../../components/website/navbar.jsx';
 import Footer from '../../components/website/footer.jsx';
 import exists from '../../helpers/exists.js';
 
-let interval = null;
-
 async function scrollToSection(section) {
   if (exists(section)) {
     // requestAnimationFrame ensures the browser has finished its current task
@@ -28,7 +26,7 @@ async function wordFlick() {
   let offset = 0;
   let forwards = true;
   const wordEl = document.getElementById('flickering-word');
-  interval = setInterval(function () {
+  setInterval(function () {
     if (forwards) {
       if (offset >= words[i].length) {
         skip_count += 1;

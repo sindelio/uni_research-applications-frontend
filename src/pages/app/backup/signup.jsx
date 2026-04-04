@@ -1,19 +1,11 @@
-import Waves from '../../components/app/waves.jsx';
+import Waves from '../../../components/app/waves.jsx';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import request from '../../helpers/request.js';
-import Anchor from '../../components/app/anchor.jsx';
-import Button from '../../components/app/button.jsx';
-import InputText from '../../components/app/input-text.jsx';
-import InputPassword from '../../components/app/input-password.jsx';
-import Select from '../../components/app/select.jsx';
-
-async function checkEmailFormat() {
-  const emailEl = document.getElementById('email');
-  const email = emailEl?.value;
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  return emailRegex.test(email);
-}
+import request from '../../../helpers/request.js';
+import Anchor from '../../../components/app/anchor.jsx';
+import Button from '../../../components/app/button.jsx';
+import InputText from '../../../components/app/input-text.jsx';
+import InputPassword from '../../../components/app/input-password.jsx';
 
 async function checkPasswordLength() {
   const passwordEl = document.getElementById('password');
@@ -43,41 +35,23 @@ async function checkPasswordMatch() {
   }
 }
 
-async function maskPhone(value) {
-  return value
-    .replace(/\D/g, '') // Remove non-digits
-    .replace(/(\d{2})(\d)/, '($1) $2') // Add area code parens
-    .replace(/(\d{5})(\d)/, '$1-$2') // Add hyphen for 9 digits
-    .replace(/(-\d{4})\d+?$/, '$1'); // Limit to 11 digits total
-}
-
-async function checkPhoneFormat() {
-  const phoneEl = document.getElementById('phone');
-  const phone = phoneEl?.value;
-  // Validates (XX) 9XXXX-XXXX or (XX) XXXX-XXXX
-  const phoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
-  return phoneRegex.test(phone);
-}
-
-// async function checkTermsAgreement() {
-//   const termsAgreementEl = document.getElementById('termsAgreement');
-//   return termsAgreementEl?.checked;
-// }
-
-async function addInputListeners() {
-  // Password length
+async function addPasswordChangeListener() {
   const passwordEl = document.getElementById('password');
   passwordEl.addEventListener('keyup', checkPasswordLength);
-
-  // Password match
   const repeatPasswordEl = document.getElementById('repeatPassword');
   repeatPasswordEl.addEventListener('keyup', checkPasswordMatch);
+}
 
-  // Phone
-  const phoneEl = document.getElementById('phone');
-  phoneEl.addEventListener('input', async (event) => {
-    event.target.value = await maskPhone(event.target.value);
-  });
+async function checkEmailFormat() {
+  const emailEl = document.getElementById('email');
+  const email = emailEl?.value;
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return emailRegex.test(email);
+}
+
+async function checkTermsAgreement() {
+  const termsAgreementEl = document.getElementById('termsAgreement');
+  return termsAgreementEl?.checked;
 }
 
 async function addSubmitListener() {
@@ -85,22 +59,22 @@ async function addSubmitListener() {
   formEl.addEventListener(
     'submit',
     async (event) => {
-      Swal.fire({ title: 'Espere um momento ...' });
+      Swal.fire({ title: 'Please wait ...' });
       event.preventDefault();
-      // const termsAgreement = await checkTermsAgreement();
-      // if (termsAgreement === false) {
-      //   await Swal.fire({
-      //     title: 'Oops',
-      //     text: 'Please agree to the terms of service and privacy policy before signin up.',
-      //     confirmButtonText: 'OK',
-      //   });
-      //   return null;
-      // }
+      const termsAgreement = await checkTermsAgreement();
+      if (termsAgreement === false) {
+        await Swal.fire({
+          title: 'Oops',
+          text: 'Please agree to the terms of service and privacy policy before signin up.',
+          confirmButtonText: 'OK',
+        });
+        return null;
+      }
       const emailCheckFormat = await checkEmailFormat();
       if (emailCheckFormat === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Informe um endereço eletrônico válido.',
+          text: 'Please provide a valid email address.',
           confirmButtonText: 'OK',
         });
         return null;
@@ -109,7 +83,7 @@ async function addSubmitListener() {
       if (passwordCheckLength === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Senhas devem conter no mínimo 8 caracteres.',
+          text: 'Please provide a password with 8 characters or more.',
           confirmButtonText: 'OK',
         });
         return null;
@@ -118,37 +92,24 @@ async function addSubmitListener() {
       if (passwordCheckMatch === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Senhas devem ser iguais.',
-          confirmButtonText: 'OK',
-        });
-        return null;
-      }
-      const phoneCheckFormat = await checkPhoneFormat();
-      if (phoneCheckFormat === false) {
-        await Swal.fire({
-          title: 'Oops',
-          text: 'Informe um telefone válido: (99) 99999-9999',
+          text: 'Please make sure password and repeat password are matching.',
           confirmButtonText: 'OK',
         });
         return null;
       }
       const formData = new FormData(formEl);
-      const userType = formData.get('userType');
       const user = {
         email: formData.get('email'),
         password: formData.get('password'),
-        phone: formData.get('phone'),
-        institution: formData.get('institution'),
-        name: formData.get('name'),
       };
-      const responseJson = await request('POST', `/${userType}`, user);
+      const responseJson = await request('POST', '/', user);
       if (responseJson.success === true) {
         await Swal.fire({
           title: 'Success',
-          text: 'Um email de confirmação foi enviado para o seu endereço eletrônico.',
+          text: 'A confirmation email has been sent to you, please check your inbox. If the email is not in your inbox, it might be in spam.',
           confirmButtonText: 'OK',
         });
-        window.location.href = `/app/signin`;
+        window.location.href = '/app/signin';
       } else if (responseJson?.error) {
         await Swal.fire({
           title: 'Oops',
@@ -164,67 +125,48 @@ async function addSubmitListener() {
 function SignUp() {
   onMount(async () => {
     await addSubmitListener();
-    await addInputListeners();
+    await addPasswordChangeListener();
   });
   return (
-    <div class="grid grid:cols-1 md:grid-cols-10 md:text-lg text-center">
+    <div
+      class="grid grid:cols-1 md:grid-cols-10 md:text-lg text-center"
+      style={{ 'font-family': 'Poppins, sans-serif' }}
+    >
       <div class="col-start-1 col-span-1 md:col-start-1 md:col-span-full text-3xl md:text-5xl">
-        <h1 class="font-[Wizzta] p-6 text-purple-600">ENPCV</h1>
+        <h1 class="font-[Wizzta] p-8 text-purple-600">TalentSourcery</h1>
       </div>
       <div class="col-start-1 col-span-1 md:col-start-3 md:col-span-6 flex flex-row p-4 bg-white border-2 border-purple-500 rounded-2xl">
         <div class="grid grid-cols-2">
           <div class="col-start-1 col-span-2 md:col-span-1 flex flex-col">
             <form id="form" class="flex flex-col">
-              <Select id="userType" label="">
-                <option value="participant">Participante</option>
-                <option value="examiner">Avaliador</option>
-              </Select>
               <InputText
                 id="email"
                 placeholder="Email"
                 required
-                inputClass="w-[90%] my-2 text-center text-purple-600"
+                inputClass="w-[90%] mt-6 mb-2 text-center text-purple-600"
               ></InputText>
               <InputPassword
                 id="password"
-                placeholder="Senha"
+                placeholder="Password"
                 required
                 inputClass="w-[90%] mt-2 mb-2 text-center text-purple-600"
               ></InputPassword>
               <InputPassword
                 id="repeatPassword"
-                placeholder="Repetir senha"
+                placeholder="Repeat password"
                 required
                 inputClass="w-[90%] mt-2 mb-4 text-center text-purple-600"
               ></InputPassword>
-              <InputText
-                id="phone"
-                placeholder="Telefone (DDD + Número)"
-                required
-                inputClass="w-[90%] my-2 text-center text-purple-600"
-              ></InputText>
-              <InputText
-                id="institution"
-                placeholder="Instituição"
-                required
-                inputClass="w-[90%] my-2 text-center text-purple-600"
-              ></InputText>
-              <InputText
-                id="name"
-                placeholder="Nome completo"
-                required
-                inputClass="w-[90%] my-2 text-center text-purple-600"
-              ></InputText>
               <p
                 id="passwordCheckLength"
                 class="mt-0 mb-0 text-xs text-red-600"
               >
-                Senhas devem conter no mínimo 8 caracteres
+                Password must have 8 characters or more
               </p>
               <p id="passwordCheckMatch" class="mt-0 mb-2 text-xs text-red-600">
-                Senhas devem ser iguais
+                Passwords must match
               </p>
-              {/* <div class="my-4">
+              <div class="my-4">
                 <input
                   type="checkbox"
                   id="termsAgreement"
@@ -247,15 +189,15 @@ function SignUp() {
                     policy
                   </a>
                 </label>
-              </div> */}
+              </div>
               <Button type="submit" id="submit" inputClass="mx-auto mb-2">
-                Cadastrar
+                Sign up
               </Button>
             </form>
             <hr class="w-[90%] h-[0.15rem] mx-auto my-6 bg-purple-400 rounded-2xl"></hr>
             <div class="mt-2 mb-6 flex flex-row justify-center">
               <Anchor href="/signin" inputClass="mx-4 my-0 text-sm">
-                Entrar
+                Sign in
               </Anchor>
             </div>
           </div>

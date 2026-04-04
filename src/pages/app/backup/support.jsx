@@ -1,15 +1,15 @@
-import env from '../../client-envs/current.js';
+import env from '../../../client-envs/current.js';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import checkSessionJwt from '../../helpers/check-session-jwt.js';
-import request from '../../helpers/request.js';
-import Navbar from '../../components/app/navbar.jsx';
-import Content from '../../components/app/content.jsx';
-import Heading from '../../components/app/heading.jsx';
-import InputText from '../../components/app/input-text.jsx';
-import Button from '../../components/app/button.jsx';
-import TextArea from '../../components/app/text-area.jsx';
-import Select from '../../components/app/select.jsx';
+import checkSessionJwt from '../../../helpers/check-session-jwt.js';
+import request from '../../../helpers/request.js';
+import Navbar from '../../../components/app/navbar.jsx';
+import Content from '../../../components/app/content.jsx';
+import Heading from '../../../components/app/heading.jsx';
+import InputText from '../../../components/app/input-text.jsx';
+import Button from '../../../components/app/button.jsx';
+import TextArea from '../../../components/app/text-area.jsx';
+import Select from '../../../components/app/select.jsx';
 
 async function requestSupport(event) {
   Swal.fire({ title: 'Please wait ...' });
@@ -36,7 +36,7 @@ async function requestSupport(event) {
         message,
         videoUrl,
       },
-      true
+      true,
     );
     if (responseJson.success === true) {
       await Swal.fire({

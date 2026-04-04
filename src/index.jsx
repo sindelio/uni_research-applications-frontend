@@ -6,7 +6,12 @@ import './styles/index.css';
 import Intro from './pages/website/intro.jsx';
 
 // App pages
-// import SignIn from './pages/app/signin.jsx';
+import SignIn from './pages/app/signin.jsx';
+import SignUp from './pages/app/signup.jsx';
+import EmailConfirmation from './pages/app/email-confirmation.jsx';
+import PasswordRecovery from './pages/app/password-recovery.jsx';
+import PasswordReset from './pages/app/password-reset.jsx';
+import ParticipantDashboard from './pages/app/participant/dashboard.jsx';
 
 // 404 page
 import NoMatch from './pages/no-match.jsx';
@@ -35,16 +40,16 @@ render(
 
       {/* App routes */}
       <Route path="/app">
-        {/* <Route path="/" component={SignIn}></Route>
-          <Route path="/signin" component={SignIn}></Route>
-          <Route path="/signup" component={SignUp}></Route>
-          <Route
-            path="/email-confirmation"
-            component={EmailConfirmation}
-          ></Route>
-          <Route path="/password-recovery" component={PasswordRecovery}></Route>
-          <Route path="/password-reset" component={PasswordReset}></Route>
-          <Route path="/dashboard" component={Dashboard}></Route> */}
+        <Route path="/" component={SignIn}></Route>
+        <Route path="/signin" component={SignIn}></Route>
+        <Route path="/signup" component={SignUp}></Route>
+        <Route path="/email-confirmation" component={EmailConfirmation}></Route>
+        <Route path="/password-recovery" component={PasswordRecovery}></Route>
+        <Route path="/password-reset" component={PasswordReset}></Route>
+        <Route
+          path="/participant/dashboard"
+          component={ParticipantDashboard}
+        ></Route>
       </Route>
       {/* 404 route */}
       <Route path="*" component={NoMatch} />

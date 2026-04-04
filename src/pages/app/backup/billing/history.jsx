@@ -1,21 +1,22 @@
 import { onMount } from 'solid-js';
-import checkSessionJwt from '../../../helpers/check-session-jwt.js';
-import request from '../../../helpers/request.js';
-import Navbar from '../../../components/app/navbar.jsx';
-import Button from '../../../components/app/button.jsx';
-import P from '../../../components/app/paragraph.jsx';
-import InputNumber from '../../../components/app/input-number.jsx';
+import Swal from 'sweetalert2';
+import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
+import request from '../../../../helpers/request.js';
+import Navbar from '../../../../components/app/navbar.jsx';
+import Button from '../../../../components/app/button.jsx';
+import P from '../../../../components/app/paragraph.jsx';
+import InputNumber from '../../../../components/app/input-number.jsx';
 
 async function getHistory(pageRequested = 1) {
   const responseJson = await request(
     'POST',
     '/paginated-find',
     {
-      type: 'Request',
+      type: 'Invoice',
       query: {},
       page: pageRequested,
     },
-    true
+    true,
   );
   if (responseJson.error !== null) {
     await Swal.fire({
@@ -41,11 +42,17 @@ async function addHistoryInfo(itemsInPage) {
     const el = document.createElement('li');
     el.className =
       'list-none my-6 px-6 py-4 border-2 border-purple-500 rounded-xl col-start-1 col-span-full shadow-md hover:cursor-pointer';
-    const request = `<div class="py-1">Action: ${item?.action} | Source: ${item?.source} | Type: ${item?.type}</div>`;
+    const date = `<div>Month and year: ${item?.monthOfReference} of ${item?.yearOfReference}</div>`;
+    const amount = `<div>Amount: ${item?.amountStringified?.total}</div>`;
+    let paid = `<div>Paid: <span class="text-green-600">true</span></div>`;
+    if (item?.paid === false) {
+      paid = `<div>Paid: <span class="text-red-600">false</span></div>`;
+    }
     const plus = `<div class="text-center text-purple-500 text-xl">+</div>`;
-    el.innerHTML = `${request}${plus}`;
+    el.innerHTML = `${date}${amount}${paid}${plus}`;
     el.addEventListener('click', async () => {
-      window.location.href = `/app/api/history/details?id=${item._id}`;
+      const id = item._id;
+      window.location.href = `/app/billing/history/details?id=${id}`;
     });
     listEl.appendChild(el);
   });
@@ -107,7 +114,7 @@ async function addNextListener() {
   });
 }
 
-function ApiHistory() {
+function BillingHistory() {
   onMount(async () => {
     await checkSessionJwt();
     const { numberOfItems, itemsInPage } = await getHistory();
@@ -137,4 +144,4 @@ function ApiHistory() {
   );
 }
 
-export default ApiHistory;
+export default BillingHistory;

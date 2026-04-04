@@ -1,8 +1,8 @@
 import { onMount } from 'solid-js';
-import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
-import request from '../../../../helpers/request.js';
-import Navbar from '../../../../components/app/navbar.jsx';
-import P from '../../../../components/app/paragraph.jsx';
+import checkSessionJwt from '../../../../../helpers/check-session-jwt.js';
+import request from '../../../../../helpers/request.js';
+import Navbar from '../../../../../components/app/navbar.jsx';
+import P from '../../../../../components/app/paragraph.jsx';
 
 async function readRequest() {
   const urlParams = new URLSearchParams(window.location.search);

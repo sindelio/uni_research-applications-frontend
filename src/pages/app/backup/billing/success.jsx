@@ -1,4 +1,4 @@
-import Navbar from '../../../components/app/navbar.jsx';
+import Navbar from '../../../../components/app/navbar.jsx';
 
 function BillingSuccess() {
   return (

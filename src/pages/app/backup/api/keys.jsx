@@ -1,11 +1,11 @@
 import { onMount, createSignal } from 'solid-js';
 import Swal from 'sweetalert2';
-import checkSessionJwt from '../../../helpers/check-session-jwt.js';
-import request from '../../../helpers/request.js';
-import Navbar from '../../../components/app/navbar.jsx';
-import Heading from '../../../components/app/heading.jsx';
-import P from '../../../components/app/paragraph.jsx';
-import Button from '../../../components/app/button.jsx';
+import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
+import request from '../../../../helpers/request.js';
+import Navbar from '../../../../components/app/navbar.jsx';
+import Heading from '../../../../components/app/heading.jsx';
+import P from '../../../../components/app/paragraph.jsx';
+import Button from '../../../../components/app/button.jsx';
 
 const [getKeyVisibility, setKeyVisibility] = createSignal(false);
 
@@ -30,7 +30,7 @@ async function addObfuscatedKeyInfo() {
   setKeyVisibility(false);
   const obfuscatedApiKey = `${apiKey.slice(
     0,
-    4
+    4,
   )}**************************************************${apiKey.slice(-4)}`;
   const apiKeyEl = document.getElementById('apiKey');
   apiKeyEl.textContent = obfuscatedApiKey;
@@ -65,7 +65,7 @@ async function addRegenerateListener() {
       'POST',
       '/regenerate-api-key',
       null,
-      true
+      true,
     );
     if (responseJson.error) {
       await Swal.fire({

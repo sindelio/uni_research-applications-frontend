@@ -1,11 +1,11 @@
-import env from '../../../../client-envs/current.js';
+import env from '../../../../../client-envs/current.js';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import checkSessionJwt from '../../../../helpers/check-session-jwt.js';
-import request from '../../../../helpers/request.js';
-import Navbar from '../../../../components/app/navbar.jsx';
-import Button from '../../../../components/app/button.jsx';
-import P from '../../../../components/app/paragraph.jsx';
+import checkSessionJwt from '../../../../../helpers/check-session-jwt.js';
+import request from '../../../../../helpers/request.js';
+import Navbar from '../../../../../components/app/navbar.jsx';
+import Button from '../../../../../components/app/button.jsx';
+import P from '../../../../../components/app/paragraph.jsx';
 
 async function getInvoice() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -72,7 +72,7 @@ async function addPaymentListener(invoice) {
         'POST',
         `/invoice/pay`,
         { id: invoice._id },
-        true
+        true,
       );
       if (responseJson.error !== null) {
         await Swal.fire({
