@@ -25,7 +25,7 @@ async function request(method, path, data, auth) {
     console.error(err);
     await Swal.fire({
       title: 'Oops',
-      text: `Something unexpected happened. Please request support directly at ${env.SUPPORT_EMAIL}`,
+      text: `Algo inesperado aconteceu. Por favor busque suporte no endereço eletrônico ${env.SUPPORT_EMAIL}`,
       confirmButtonText: 'OK',
     });
   }

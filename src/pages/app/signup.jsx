@@ -109,7 +109,7 @@ async function addSubmitListener() {
       if (passwordCheckLength === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Senhas devem conter no mínimo 8 caracteres.',
+          text: 'Senha deve conter no mínimo 8 caracteres.',
           confirmButtonText: 'OK',
         });
         return null;
@@ -144,7 +144,7 @@ async function addSubmitListener() {
       const responseJson = await request('POST', `/${userType}`, user);
       if (responseJson.success === true) {
         await Swal.fire({
-          title: 'Success',
+          title: 'Sucesso',
           text: 'Um email de confirmação foi enviado para o seu endereço eletrônico.',
           confirmButtonText: 'OK',
         });

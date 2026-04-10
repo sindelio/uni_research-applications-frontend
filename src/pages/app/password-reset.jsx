@@ -1,21 +1,28 @@
+import env from '../../client-envs/current.js';
 import Waves from '../../components/app/waves.jsx';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
+import exists from '../../helpers/exists.js';
 import request from '../../helpers/request.js';
 import Anchor from '../../components/app/anchor.jsx';
 import Button from '../../components/app/button.jsx';
 import InputPassword from '../../components/app/input-password.jsx';
 
-async function getQueryValue(parameter) {
-  const queriesInUrl = window.location.search.substring(1);
-  const queries = queriesInUrl.split('&');
-  for (let i = 0; i < queries.length; i += 1) {
-    const [query, value] = queries[i].split('=');
-    if (query === parameter) {
-      return value;
-    }
+const { SUPPORT_EMAIL } = env;
+
+async function getQueryParams() {
+  const urlQueryParams = new URLSearchParams(window.location.search);
+  const email = urlQueryParams.get('email');
+  const userType = urlQueryParams.get('userType');
+  const token = urlQueryParams.get('token');
+  if (!exists(email) || !exists(userType) || !exists) {
+    await Swal.fire({
+      title: 'Oops',
+      text: `Algo inesperado aconteceu. Busque suporte no endereço eletrônico "${SUPPORT_EMAIL}"`,
+      confirmButtonText: 'OK',
+    });
   }
-  return null;
+  return { email, userType, token };
 }
 
 async function checkPasswordLength() {
@@ -64,7 +71,7 @@ async function addSubmitListener() {
       if (passwordCheckLength === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Password must have 8 characters or more.',
+          text: 'Senha deve conter no mínimo 8 caracteres.',
           confirmButtonText: 'OK',
         });
         return null;
@@ -73,24 +80,24 @@ async function addSubmitListener() {
       if (passwordCheckMatch === false) {
         await Swal.fire({
           title: 'Oops',
-          text: 'Passwords must match.',
+          text: 'Senhas devem ser iguais.',
           confirmButtonText: 'OK',
         });
         return null;
       }
       const formData = new FormData(formEl);
       const newPassword = formData.get('password');
-      const email = await getQueryValue('email');
-      const passwordRecoveryToken = await getQueryValue('token');
-      const responseJson = await request('POST', '/reset-password', {
+      const { email, userType, token } = await getQueryParams();
+      const path = `/${userType}/reset-password`;
+      const responseJson = await request('POST', path, {
         email,
-        passwordRecoveryToken,
+        passwordRecoveryToken: token,
         newPassword,
       });
       if (responseJson.success === true) {
         await Swal.fire({
-          title: 'Success',
-          text: 'Your password has been reset!',
+          title: 'Sucesso',
+          text: 'Sua senha foi resetada!',
           confirmButtonText: 'OK',
         });
         window.location.href = '/app/signin';
@@ -102,7 +109,7 @@ async function addSubmitListener() {
         });
       }
     },
-    false
+    false,
   );
 }
 

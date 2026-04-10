@@ -2,26 +2,31 @@ import Waves from '../../components/app/waves.jsx';
 import env from '../../client-envs/current.js';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
+import exists from '../../helpers/exists.js';
 import request from '../../helpers/request.js';
 import Anchor from '../../components/app/anchor.jsx';
 import InputText from '../../components/app/input-text.jsx';
 
-async function getEmail() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const email = urlParams.get('email');
-  if (email === null || email === undefined) {
+const { SUPPORT_EMAIL } = env;
+
+async function getQueryParams() {
+  const urlQueryParams = new URLSearchParams(window.location.search);
+  const email = urlQueryParams.get('email');
+  const userType = urlQueryParams.get('userType');
+  if (!exists(email) || !exists(userType)) {
     await Swal.fire({
       title: 'Oops',
-      text: `Something unexpected happened. Please request support directly at ${env.SUPPORT_EMAIL}`,
+      text: `Algo inesperado aconteceu. Busque suporte no endereço eletrônico "${SUPPORT_EMAIL}"`,
       confirmButtonText: 'OK',
     });
   }
-  return email;
+  return { email, userType };
 }
 
-async function confirmEmail(email) {
+async function confirmEmail(email, userType) {
   Swal.fire({ title: 'Please wait ...' });
-  const responseJson = await request('POST', '/confirm-email', { email }, null);
+  const path = `/${userType.toLowerCase()}/confirm-email`;
+  const responseJson = await request('POST', path, { email }, null);
   if (responseJson.error) {
     await Swal.fire({
       title: 'Oops',
@@ -30,8 +35,8 @@ async function confirmEmail(email) {
     });
   } else {
     await Swal.fire({
-      title: 'Success',
-      text: 'Your email has been confirmed!',
+      title: 'Sucesso',
+      text: 'Seu email foi confirmado!',
       confirmButtonText: 'OK',
     });
     window.location.href = '/app/signin';
@@ -40,8 +45,8 @@ async function confirmEmail(email) {
 
 function EmailConfirmation() {
   onMount(async () => {
-    const email = await getEmail();
-    await confirmEmail(email);
+    const { email, userType } = await getQueryParams();
+    await confirmEmail(email, userType);
   });
   return (
     <div
@@ -49,14 +54,14 @@ function EmailConfirmation() {
       style={{ 'font-family': 'Poppins, sans-serif' }}
     >
       <div class="col-start-1 col-span-1 md:col-start-1 md:col-span-full text-3xl md:text-5xl">
-        <h1 class="font-[Wizzta] p-8 text-purple-600">TalentSourcery</h1>
+        <h1 class="font-[Wizzta] p-8 text-purple-600">ENPCV</h1>
       </div>
       <div class="col-start-1 col-span-1 md:col-start-3 md:col-span-6 flex flex-row p-4 bg-white border-2 border-purple-500 rounded-2xl">
         <div class="grid grid-cols-2">
           <div class="col-start-1 col-span-2 md:col-span-1 flex flex-col">
             <InputText inputClass="invisible w-[90%] my-0 py-0 text-center"></InputText>
             <Anchor href="/signin" inputClass="mx-auto mt-[10%] mb-[20%]">
-              Go to sign in
+              Entrar
             </Anchor>
           </div>
           <div class="col-start-2 col-span-1 invisible md:visible mx-auto my-auto">
