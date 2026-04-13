@@ -1,7 +1,11 @@
+import env from '../client-envs/current.js';
+
+const { LOCAL_STORAGE_KEY } = env;
+
 async function checkSessionJwt() {
-  const jwt = localStorage.getItem('talent-sourcery-session-jwt');
-  if (!jwt) {
-    window.location.href = '/signin';
+  const jwt = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (jwt === '') {
+    window.location.href = '/app/signin';
   }
 }
 

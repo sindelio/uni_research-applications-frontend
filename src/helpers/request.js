@@ -2,6 +2,12 @@ import env from '../client-envs/current.js';
 import Swal from 'sweetalert2';
 import exists from './exists.js';
 
+const {
+  LOCAL_STORAGE_KEY,
+  BACKEND_URL,
+  SUPPORT_EMAIL,
+} = env;
+
 async function request(method, path, data, auth) {
   try {
     const options = { 
@@ -11,13 +17,13 @@ async function request(method, path, data, auth) {
       },
     };
     if (auth) {
-      const jwt = localStorage.getItem('talent-sourcery-session-jwt');
+      const jwt = localStorage.getItem(LOCAL_STORAGE_KEY);
       options.headers.authorization = `Bearer ${jwt}`;
     }
     if (method !== 'GET' && exists(data)) {
       options.body = JSON.stringify(data);
     }
-    const url = `${env.BACKEND_URL}${path}`;
+    const url = `${BACKEND_URL}${path}`;
     const response = await fetch(url, options);
     const responseJson = await response.json();
     return responseJson;
@@ -25,7 +31,7 @@ async function request(method, path, data, auth) {
     console.error(err);
     await Swal.fire({
       title: 'Oops',
-      text: `Algo inesperado aconteceu. Por favor busque suporte no endereço eletrônico ${env.SUPPORT_EMAIL}`,
+      text: `Algo inesperado aconteceu. Por favor busque suporte no endereço eletrônico ${SUPPORT_EMAIL}`,
       confirmButtonText: 'OK',
     });
   }

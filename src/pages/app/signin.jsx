@@ -1,3 +1,4 @@
+import env from '../../client-envs/current.js';
 import Waves from '../../components/app/waves.jsx';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
@@ -7,6 +8,8 @@ import Button from '../../components/app/button.jsx';
 import InputText from '../../components/app/input-text.jsx';
 import InputPassword from '../../components/app/input-password.jsx';
 import Select from '../../components/app/select.jsx';
+
+const { LOCAL_STORAGE_KEY } = env;
 
 async function addSubmitListener() {
   const formEl = document.querySelector('#form');
@@ -26,7 +29,7 @@ async function addSubmitListener() {
         userCredentials,
       );
       if (responseJson.success === true) {
-        localStorage.setItem('enpcv-session-jwt', responseJson.data.jwt);
+        localStorage.setItem(LOCAL_STORAGE_KEY, responseJson.data.jwt);
         window.location.href = `/app/${userType}/dashboard`;
       } else if (responseJson?.error) {
         await Swal.fire({

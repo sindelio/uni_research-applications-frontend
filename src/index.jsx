@@ -12,6 +12,7 @@ import EmailConfirmation from './pages/app/email-confirmation.jsx';
 import PasswordRecovery from './pages/app/password-recovery.jsx';
 import PasswordReset from './pages/app/password-reset.jsx';
 import ParticipantDashboard from './pages/app/participant/dashboard.jsx';
+import ParticipantAccount from './pages/app/participant/account.jsx';
 
 // 404 page
 import NoMatch from './pages/no-match.jsx';
@@ -49,6 +50,10 @@ render(
         <Route
           path="/participant/dashboard"
           component={ParticipantDashboard}
+        ></Route>
+        <Route
+          path="/participant/account"
+          component={ParticipantAccount}
         ></Route>
       </Route>
       {/* 404 route */}

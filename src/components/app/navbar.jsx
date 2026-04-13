@@ -1,54 +1,40 @@
-import env from '../../client-envs/current.js';
+import env from '../../client-envs/current';
 import { onMount } from 'solid-js';
 import Swal from 'sweetalert2';
-import request from '../../helpers/request.js';
+
+const { LOCAL_STORAGE_KEY } = env;
 
 async function windowWidthHandler() {
   const windowInnerWidth = window.innerWidth;
   const desktopNavbar = document.getElementById('navbar');
-  if (windowInnerWidth < 768) desktopNavbar.classList.add('hidden');
-  else desktopNavbar.classList.remove('hidden');
+  if (windowInnerWidth < 768) {
+    desktopNavbar.classList.add('hidden');
+  } else {
+    desktopNavbar.classList.remove('hidden');
+  }
 }
 
 async function addWindowWidthListener() {
   window.addEventListener('resize', windowWidthHandler);
 }
 
-async function readAccount() {
-  const responseJson = await request('GET', '/', null, {
-    'Content-Type': 'application/json',
-    authorization: `Bearer ${localStorage.getItem(
-      'talent-sourcery-session-jwt'
-    )}`,
-  });
-  if (responseJson.error) {
+async function addSignOutListener() {
+  const signOutEl = document.getElementById('signOut');
+  signOutEl.addEventListener('click', async () => {
     await Swal.fire({
-      title: 'Oops',
-      text: `Something unexpected happened. Please contact ${env.SUPPORT_EMAIL} for support.`,
+      title: 'Sucesso',
+      text: 'Sessão encerrada.',
       confirmButtonText: 'OK',
     });
-    window.location.href = '/dashboard';
-    return null;
-  }
-  const account = responseJson.data;
-  return account;
+    localStorage.setItem(LOCAL_STORAGE_KEY, '');
+    window.location.href = '/app/signin';
+  });
 }
 
 function Navbar() {
   onMount(async () => {
     await addWindowWidthListener();
-    const account = await readAccount();
-    const plan = account?.billing?.plan;
-    const modeEl = document.querySelector('#mode');
-    if (plan === env.BILLING_PLAN_TRIAL) {
-      modeEl.textContent = 'Trial';
-    }
-    if (plan === env.BILLING_PLAN_CONSUMPTION) {
-      modeEl.textContent = 'Partner';
-    }
-    if (plan === env.BILLING_PLAN_SUBSCRIPTION) {
-      modeEl.textContent = 'Partner';
-    }
+    await addSignOutListener();
   });
 
   return (
@@ -56,59 +42,56 @@ function Navbar() {
     <div id="navbar" class="h-screen fixed flex text-sm text-white">
       <div
         id="desktopNavbar"
-        class="w-48 p-2 bg-purple-600 transition duration-300 ease-in-out"
+        class="w-48 p-4 bg-purple-600 transition duration-300 ease-in-out"
       >
         <img
           id="hat"
-          src="/images/hat.png"
-          alt="Sourcerer hat"
+          src="/images/icon.jpeg"
+          alt="Icon"
           class="mx-auto my-4 w-16 h-16"
         />
         <nav class="mx-auto text-center">
           <a
-            href="/app/dashboard"
-            class=" flex my-2 py-2 px-4 rounded-lg transition duration-200 hover:bg-purple-800 hover:text-white"
+            href="/app/participant/dashboard"
+            class=" flex my-2 p-3 rounded-lg transition duration-200 hover:bg-purple-800"
           >
             <img
               id="dashboard"
               src="/images/dashboard.svg"
               class="h-6 w-6"
             ></img>
-            <span class="ml-4">Dashboard</span>
+            <span class="ml-4 mt-0.5">Dashboard</span>
           </a>
           <a
-            href="/app/api"
-            class=" flex my-2 py-2 px-4 rounded-lg transition duration-200 hover:bg-purple-800 hover:text-white"
+            href="/app/participant/projects"
+            class=" flex my-2 p-3 rounded-lg transition duration-200 hover:bg-purple-800"
           >
             <img id="api" src="/images/api.svg" class="h-6 w-6"></img>
-            <span class="ml-4">API</span>
+            <span class="ml-4 mt-0.5">Projetos</span>
           </a>
           <a
-            id="billing"
-            href="/app/billing"
-            class="flex my-2 py-2 px-4 rounded-lg transition duration-200 hover:bg-purple-800 hover:text-white"
-          >
-            <img id="billing" src="/images/billing.svg" class="h-6 w-6"></img>
-            <span class="ml-4">Billing</span>
-          </a>
-          <a
-            href="/app/account"
-            class="flex my-2 py-2 px-4 rounded-lg transition duration-200 hover:bg-purple-800 hover:text-white"
+            href="/app/participant/account"
+            class="flex my-2 p-3 rounded-lg transition duration-200 hover:bg-purple-800"
           >
             <img id="account" src="/images/account.svg" class="h-6 w-6"></img>
-            <span class="ml-4">Account</span>
+            <span class="ml-4 mt-0.5">Conta</span>
           </a>
           <a
-            href="/app/support"
-            class="flex my-2 py-2 px-4 rounded-lg transition duration-200 hover:bg-purple-800 hover:text-white"
+            href="/app/participant/support"
+            class="flex my-2 p-3 rounded-lg transition duration-200 hover:bg-purple-800"
           >
             <img id="support" src="/images/support.svg" class="h-6 w-6"></img>
-            <span class="ml-4">Support</span>
+            <span class="ml-4 mt-0.5">Suporte</span>
           </a>
           <hr class="w-[80%] h-[0.15rem] mx-auto my-8 bg-white rounded-2xl"></hr>
-          <div class="flex flex-col">
-            <span id="mode" class="text-xl mx-auto"></span>
-          </div>
+          <button
+            id="signOut"
+            type="button"
+            class="flex mx-auto p-3 rounded-lg transition duration-200 hover:bg-purple-800 hover:cursor-pointer"
+          >
+            <img id="support" src="/images/sign-out.svg" class="h-6 w-6"></img>
+            <span class="ml-4 mt-0.5">Sair</span>
+          </button>
         </nav>
       </div>
     </div>
