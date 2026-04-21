@@ -59,7 +59,7 @@ async function addInputListeners() {
 async function addDetailsSubmitListener() {
   const detailsSubmitEl = document.getElementById('submitDetails');
   detailsSubmitEl.addEventListener('click', async (event) => {
-    Swal.fire({ title: 'Please wait ...' });
+    Swal.fire({ title: 'Um momento ...' });
     event.preventDefault();
     const detailsFormEl = document.querySelector('#detailsForm');
     const formData = new FormData(detailsFormEl);
@@ -222,7 +222,7 @@ function Account() {
     <div class="flex flex-row text-lg">
       <Navbar></Navbar>
       <div class="ml-72 m-8">
-        <Heading>Account details</Heading>
+        <Heading>Dados da conta</Heading>
         <P id="name">Nome:</P>
         <P id="institution">Instituição:</P>
         <P id="email">Email:</P>

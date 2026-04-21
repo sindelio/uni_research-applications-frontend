@@ -1,6 +1,8 @@
 TODO:
-- Participant:
-  - Projects page
+- Participant
+  - Create Project
+    - Backend for institution
+    - Logic to block participants who havent submited their certs
   - Dashboard
 - Website:
   - Certificates page

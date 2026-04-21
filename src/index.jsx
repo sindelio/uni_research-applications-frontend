@@ -12,6 +12,8 @@ import EmailConfirmation from './pages/app/email-confirmation.jsx';
 import PasswordRecovery from './pages/app/password-recovery.jsx';
 import PasswordReset from './pages/app/password-reset.jsx';
 import ParticipantDashboard from './pages/app/participant/dashboard.jsx';
+import ParticipantProjects from './pages/app/participant/projects.jsx';
+import ParticipantCreateProject from './pages/app/participant/projects/create.jsx';
 import ParticipantAccount from './pages/app/participant/account.jsx';
 
 // 404 page
@@ -47,14 +49,16 @@ render(
         <Route path="/email-confirmation" component={EmailConfirmation}></Route>
         <Route path="/password-recovery" component={PasswordRecovery}></Route>
         <Route path="/password-reset" component={PasswordReset}></Route>
-        <Route
-          path="/participant/dashboard"
-          component={ParticipantDashboard}
-        ></Route>
-        <Route
-          path="/participant/account"
-          component={ParticipantAccount}
-        ></Route>
+
+        {/* Participant routes */}
+        <Route path="/participant">
+          <Route path="/dashboard" component={ParticipantDashboard}></Route>
+          <Route path="/projects">
+            <Route path="/" component={ParticipantProjects}></Route>
+            <Route path="/create" component={ParticipantCreateProject}></Route>
+          </Route>
+          <Route path="/account" component={ParticipantAccount}></Route>
+        </Route>
       </Route>
       {/* 404 route */}
       <Route path="*" component={NoMatch} />
